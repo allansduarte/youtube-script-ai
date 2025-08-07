@@ -54,26 +54,53 @@ def main():
         logger.info("Training mode not yet implemented")
         
     elif args.mode == "generate":
-        # Quick generation example
-        db = TechniqueDatabase()
-        structure = db.generate_complete_script_structure(
-            niche=args.niche,
-            hook_type="curiosity_gap",
-            structure_type="problem_solution",
-            video_length=10,
-            topic=args.topic or "Como aprender programação"
-        )
-        
-        print("\n=== ESTRUTURA DE SCRIPT GERADA ===\n")
-        print(f"Tópico: {structure['metadata']['topic']}")
-        print(f"Nicho: {structure['metadata']['niche']}")
-        print(f"Duração estimada: {structure['metadata']['estimated_length']} minutos")
-        print(f"\nHook ({structure['hook']['type']}):")
-        print(f"Template: {structure['hook']['template']}")
-        print(f"Exemplo: {structure['hook']['example']}")
-        print(f"\nEstrutura ({structure['structure']['name']}):")
-        for section in structure['structure']['sections']:
-            print(f"- {section['name']}: {section['purpose']} ({section['estimated_duration']})")
+        # Script generation mode
+        if args.topic:
+            from generation.script_generator import ScriptGenerator, ScriptGenerationRequest
+            
+            generator = ScriptGenerator()
+            request = ScriptGenerationRequest(
+                topic=args.topic,
+                niche=args.niche,
+                hook_type="curiosity_gap",
+                structure_type="problem_solution",
+                target_duration=10,
+                tone="casual",
+                target_audience="geral",
+                include_cta=True
+            )
+            
+            script = generator.generate_script(request)
+            
+            print("\n=== SCRIPT COMPLETO GERADO ===\n")
+            print(f"Tópico: {script.metadata['topic']}")
+            print(f"Qualidade: {script.quality_score:.2f}/1.0")
+            print(f"Duração estimada: {script.estimated_duration:.1f} minutos")
+            print(f"Técnicas usadas: {len(script.techniques_used)}")
+            print(f"\n--- SCRIPT ---\n")
+            print(script.script_text)
+            print(f"\n--- FIM DO SCRIPT ---\n")
+        else:
+            # Quick generation example
+            db = TechniqueDatabase()
+            structure = db.generate_complete_script_structure(
+                niche=args.niche,
+                hook_type="curiosity_gap",
+                structure_type="problem_solution",
+                video_length=10,
+                topic=args.topic or "Como aprender programação"
+            )
+            
+            print("\n=== ESTRUTURA DE SCRIPT GERADA ===\n")
+            print(f"Tópico: {structure['metadata']['topic']}")
+            print(f"Nicho: {structure['metadata']['niche']}")
+            print(f"Duração estimada: {structure['metadata']['estimated_length']} minutos")
+            print(f"\nHook ({structure['hook']['type']}):")
+            print(f"Template: {structure['hook']['template']}")
+            print(f"Exemplo: {structure['hook']['example']}")
+            print(f"\nEstrutura ({structure['structure']['name']}):")
+            for section in structure['structure']['sections']:
+                print(f"- {section['name']}: {section['purpose']} ({section['estimated_duration']})")
 
 
 if __name__ == "__main__":
