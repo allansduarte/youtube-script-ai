@@ -1,0 +1,89 @@
+{
+  "curiosity_gap_hooks": [
+    {
+      "text": "Eu descobri que 90% das pessoas estão fazendo isso errado... mas antes de revelar o que é, deixe-me contar como descobri isso.",
+      "psychological_principle": "Information Gap Theory",
+      "effectiveness_score": 0.85,
+      "best_niches": ["educacao", "tecnologia", "negocios"],
+      "context": "educational_content"
+    },
+    {
+      "text": "Existe um segredo que apenas 1% das pessoas conhecem sobre {topic}... e hoje vou compartilhar com você.",
+      "psychological_principle": "Exclusivity and Scarcity",
+      "effectiveness_score": 0.80,
+      "best_niches": ["negocios", "financas", "desenvolvimento_pessoal"],
+      "context": "secret_knowledge"
+    },
+    {
+      "text": "O que vou te mostrar nos próximos minutos pode mudar completamente sua forma de pensar sobre {subject}.",
+      "psychological_principle": "Transformation Promise",
+      "effectiveness_score": 0.75,
+      "best_niches": ["lifestyle", "educacao", "desenvolvimento_pessoal"],
+      "context": "mindset_shift"
+    }
+  ],
+  "controversy_hooks": [
+    {
+      "text": "A faculdade é uma perda de tempo e dinheiro. Eu sei que isso vai contra tudo que seus pais te ensinaram, mas...",
+      "psychological_principle": "Cognitive Dissonance",
+      "effectiveness_score": 0.75,
+      "best_niches": ["educacao", "negocios", "desenvolvimento_pessoal"],
+      "context": "educational_system"
+    },
+    {
+      "text": "Trabalhar duro NÃO te fará rico. Na verdade, pode até te deixar mais pobre...",
+      "psychological_principle": "Belief Challenge",
+      "effectiveness_score": 0.70,
+      "best_niches": ["negocios", "financas", "empreendedorismo"],
+      "context": "wealth_building"
+    }
+  ],
+  "personal_story_hooks": [
+    {
+      "text": "Há 2 anos atrás, eu estava dormindo no sofá da casa da minha mãe. Hoje, tenho uma empresa de 7 dígitos. Deixe-me contar como tudo mudou.",
+      "psychological_principle": "Narrative Transportation",
+      "effectiveness_score": 0.80,
+      "best_niches": ["empreendedorismo", "lifestyle", "desenvolvimento_pessoal"],
+      "context": "transformation_story"
+    },
+    {
+      "text": "Eu já perdi mais de R$ 50.000 tentando aprender marketing digital. Mas esse erro me ensinou a estratégia que uso hoje para...",
+      "psychological_principle": "Failure to Success",
+      "effectiveness_score": 0.75,
+      "best_niches": ["marketing", "negocios", "educacao"],
+      "context": "learning_from_failure"
+    }
+  ],
+  "statistics_hooks": [
+    {
+      "text": "97% das pessoas que começam um negócio online falham no primeiro ano. Se você não quer fazer parte dessa estatística...",
+      "psychological_principle": "Loss Aversion",
+      "effectiveness_score": 0.70,
+      "best_niches": ["empreendedorismo", "negocios", "online_business"],
+      "context": "failure_statistics"
+    },
+    {
+      "text": "A pessoa média gasta 7 anos da sua vida no trabalho e morre com apenas R$ 1.000 na conta. Mas existe uma forma diferente...",
+      "psychological_principle": "Mortality Salience",
+      "effectiveness_score": 0.65,
+      "best_niches": ["financas", "investimentos", "aposentadoria"],
+      "context": "financial_statistics"
+    }
+  ],
+  "question_hooks": [
+    {
+      "text": "Você já se perguntou por que algumas pessoas conseguem tudo que querem enquanto outras lutam a vida inteira?",
+      "psychological_principle": "Self-Reference Effect",
+      "effectiveness_score": 0.65,
+      "best_niches": ["desenvolvimento_pessoal", "psicologia", "sucesso"],
+      "context": "success_disparity"
+    },
+    {
+      "text": "Qual é a diferença entre pessoas que ganham R$ 5.000 e pessoas que ganham R$ 50.000 por mês?",
+      "psychological_principle": "Comparison and Aspiration",
+      "effectiveness_score": 0.70,
+      "best_niches": ["financas", "carreira", "negocios"],
+      "context": "income_difference"
+    }
+  ]
+}

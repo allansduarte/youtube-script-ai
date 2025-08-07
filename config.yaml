@@ -1,0 +1,74 @@
+# YouTube Script AI Configuration
+
+# API Keys
+youtube:
+  api_key: "YOUR_YOUTUBE_API_KEY_HERE"
+  max_results: 50
+  quality_threshold: 0.7
+
+# Model Configuration
+model:
+  base_model: "meta-llama/Llama-2-7b-hf"
+  max_length: 2048
+  temperature: 0.7
+  top_p: 0.9
+  batch_size: 4
+  learning_rate: 2e-4
+  num_epochs: 3
+
+# Training Configuration
+training:
+  theory_weight: 0.4
+  practice_weight: 0.6
+  validation_split: 0.2
+  save_steps: 500
+  eval_steps: 100
+  warmup_steps: 100
+  gradient_accumulation_steps: 4
+  max_grad_norm: 1.0
+
+# Data Collection
+data_collection:
+  min_views: 10000
+  min_engagement_rate: 0.02
+  max_duration_minutes: 30
+  languages: ["pt", "en"]
+  niches: ["tecnologia", "educacao", "entretenimento", "lifestyle", "negocios"]
+
+# Storytelling Techniques
+storytelling:
+  hook_types:
+    - "curiosity_gap"
+    - "controversy"
+    - "personal_story" 
+    - "statistics_shock"
+    - "question_direct"
+    - "promise_benefit"
+  
+  narrative_structures:
+    - "hero_journey"
+    - "problem_solution"
+    - "before_after"
+    - "list_format"
+    - "tutorial_step"
+
+# Generation Settings
+generation:
+  max_script_length: 1500
+  min_script_length: 300
+  include_analysis: true
+  output_formats: ["markdown", "json", "txt"]
+
+# Interface Settings
+interface:
+  port: 7860
+  share: false
+  debug: false
+  theme: "default"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/youtube_script_ai.log"
+  max_size: "10MB"
+  backup_count: 5
