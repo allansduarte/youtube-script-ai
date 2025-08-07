@@ -1,0 +1,74 @@
+{
+  "storytelling_fundamentals": [
+    {
+      "principle": "Show Don't Tell",
+      "description": "Demonstre conceitos através de exemplos e histórias ao invés de apenas explicar",
+      "example": "Em vez de dizer 'é importante ter disciplina', conte uma história sobre como você acordou às 5h por 30 dias seguidos e os resultados que obteve",
+      "application": "Use exemplos concretos, histórias pessoais e demonstrações visuais"
+    },
+    {
+      "principle": "Emotional Resonance",
+      "description": "Conecte-se emocionalmente com a audiência através de experiências compartilhadas",
+      "example": "Todos nós já passamos pela frustração de não conseguir aprender algo novo, não importa o quanto tentamos...",
+      "application": "Identifique emoções universais relacionadas ao seu tópico"
+    },
+    {
+      "principle": "Stakes and Consequences",
+      "description": "Estabeleça claramente o que está em jogo e as consequências das escolhas",
+      "example": "Se você não dominar essa habilidade nos próximos 6 meses, seus concorrentes vão passar na sua frente",
+      "application": "Defina custos de não agir e benefícios de agir"
+    },
+    {
+      "principle": "Progression and Growth",
+      "description": "Mostre uma jornada de transformação clara",
+      "example": "De iniciante completo a expert em 90 dias - vou mostrar cada passo",
+      "application": "Estruture o conteúdo como uma jornada com marcos claros"
+    }
+  ],
+  "psychological_triggers": [
+    {
+      "trigger": "Curiosity Gap",
+      "mechanism": "Cria uma lacuna entre o que sabemos e queremos saber",
+      "examples": [
+        "O que vou te contar pode mudar sua vida, mas primeiro...",
+        "Existe um segredo que só 1% das pessoas conhece sobre...",
+        "Descubra o erro que 90% das pessoas cometem quando..."
+      ],
+      "effectiveness": "Alta - explora necessidade compulsiva de preencher lacunas"
+    },
+    {
+      "trigger": "Social Proof",
+      "mechanism": "Usa comportamento de outros como validação",
+      "examples": [
+        "Mais de 10.000 pessoas já usaram essa estratégia",
+        "Meus melhores alunos sempre fazem isso primeiro",
+        "Os especialistas recomendam essa abordagem"
+      ],
+      "effectiveness": "Muito Alta - reduz incerteza e risco percebido"
+    },
+    {
+      "trigger": "Scarcity and Urgency",
+      "mechanism": "Cria sensação de oportunidade limitada",
+      "examples": [
+        "Esta oportunidade só existe agora",
+        "Apenas os primeiros 100 terão acesso a...",
+        "Se você não agir hoje, pode ser tarde demais"
+      ],
+      "effectiveness": "Alta - acelera tomada de decisão"
+    }
+  ],
+  "narrative_psychology": {
+    "attention_span": {
+      "first_15_seconds": "Crítico - determina se viewer continua assistindo",
+      "first_30_seconds": "Hook deve estar completo e promessa clara",
+      "2_minute_mark": "Primeiro ponto de abandono significativo",
+      "middle_section": "Precisa de reforços de engajamento a cada 2-3 minutos"
+    },
+    "engagement_mechanics": {
+      "pattern_interrupt": "Quebra expectativas para reganhar atenção",
+      "callback": "Refere a pontos anteriores para criar coesão",
+      "preview": "Antecipa conteúdo futuro para manter interesse",
+      "interaction": "Pede resposta ativa do viewer"
+    }
+  }
+}
