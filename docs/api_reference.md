@@ -58,9 +58,11 @@ from src.generation.script_generator import ScriptGenerator, ScriptGenerationReq
 generator = ScriptGenerator()
 ```
 
-#### ScriptGenerationRequest
+### ScriptGenerationRequest
 
 Data class for script generation parameters.
+
+**New in this version**: Added optional `description` field for providing additional context to improve script quality.
 
 ```python
 request = ScriptGenerationRequest(
@@ -72,6 +74,7 @@ request = ScriptGenerationRequest(
     tone="casual",  # casual, professional, enthusiastic, educational
     target_audience="iniciantes",  # iniciantes, intermediarios, avancados, geral
     include_cta=True,
+    description="quero criar meu primeiro projeto para conseguir emprego",  # New: Optional description
     custom_context={"key": "value"}  # Optional custom context
 )
 ```
@@ -83,7 +86,17 @@ request = ScriptGenerationRequest(
 Generate a complete script based on the request.
 
 **Parameters:**
-- `request` (ScriptGenerationRequest): Generation parameters
+- `request` (ScriptGenerationRequest): Generation parameters including:
+  - `topic` (str): The main topic/title of the video  
+  - `description` (str, optional): Additional context about the user's specific goal, situation, or requirements
+  - `niche` (str): Content niche (tecnologia, educacao, negocios, lifestyle, entretenimento)
+  - `hook_type` (str): Type of hook (curiosity_gap, controversy, personal_story, statistics_shock, question_direct)
+  - `structure_type` (str): Narrative structure (hero_journey, problem_solution, list_format)
+  - `target_duration` (int): Target duration in minutes
+  - `tone` (str): Script tone (casual, professional, enthusiastic, educational)
+  - `target_audience` (str): Target audience (iniciantes, intermediarios, avancados, geral)
+  - `include_cta` (bool): Whether to include call-to-action
+  - `custom_context` (Dict[str, str], optional): Custom context dictionary
 
 **Returns:** `GeneratedScript` - Complete generated script with metadata
 

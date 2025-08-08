@@ -14,6 +14,22 @@ python src/main.py --mode interface
 
 Abre uma interface web amigável em `http://localhost:7860` (requer gradio instalado).
 
+**Nova funcionalidade**: Agora inclui campo de descrição opcional em ambas as abas para fornecer contexto adicional ao LLM.
+
+### 2. Interface CLI (Atualizada)
+
+A interface de linha de comando agora inclui prompt para descrição opcional:
+
+```bash
+python app/simple_cli.py
+```
+
+Exemplo de uso com descrição:
+```
+Tópico do vídeo: Como criar um e-commerce
+Descrição (opcional): tenho loja física e quero vender online
+```
+
 ### 2. Geração de Scripts
 
 #### Geração Rápida de Estrutura
@@ -33,6 +49,36 @@ python examples/quick_start.py
 ```
 
 Executa exemplos completos demonstrando todas as funcionalidades.
+
+## Interface Web Atualizada
+
+A interface web agora inclui o campo de **descrição** em ambas as abas:
+
+### Tab "Estrutura"
+- Campo de descrição com placeholder e dicas
+- Máximo de 500 caracteres
+- Exemplos contextuais mostrados
+- Descrição aparece nos metadados da estrutura gerada
+
+### Tab "Script Completo"  
+- Mesmo campo de descrição para consistência
+- Descrição incorporada no script final
+- Metadados incluem a descrição fornecida
+- Melhor qualidade de script quando descrição é fornecida
+
+### Exemplos de Uso na Interface Web
+
+#### Exemplo Tecnologia:
+- **Tópico**: "Como criar um app móvel"
+- **Descrição**: "quero criar um app de delivery para competir com iFood"
+
+#### Exemplo Negócios:
+- **Tópico**: "Como começar dropshipping"  
+- **Descrição**: "tenho R$ 2000 para investir e quero trabalhar de casa"
+
+#### Exemplo Educação:
+- **Tópico**: "Como passar no ENEM"
+- **Descrição**: "estudo à noite depois do trabalho e tenho dificuldade em exatas"
 
 ## Uso Programático
 
@@ -65,9 +111,10 @@ from src.generation.script_generator import ScriptGenerator, ScriptGenerationReq
 # Inicializar o gerador
 generator = ScriptGenerator()
 
-# Criar requisição de geração
+# Criar requisição de geração com descrição (novo campo opcional)
 request = ScriptGenerationRequest(
     topic="Como começar no YouTube",
+    description="tenho câmera simples e R$ 500 para investir",  # Novo campo opcional
     niche="entretenimento",
     hook_type="personal_story",
     structure_type="hero_journey",
@@ -84,6 +131,25 @@ print(f"Script gerado:")
 print(f"Qualidade: {script.quality_score:.2f}")
 print(f"Duração: {script.estimated_duration:.1f} min")
 print(script.script_text)
+```
+
+### Exemplo sem Descrição (Compatibilidade com Versão Anterior)
+
+```python
+# A descrição é opcional - o código anterior continua funcionando
+request = ScriptGenerationRequest(
+    topic="Como aprender programação",
+    niche="tecnologia",
+    hook_type="curiosity_gap",
+    structure_type="problem_solution",
+    target_duration=10,
+    tone="educational",
+    target_audience="iniciantes",
+    include_cta=True
+    # description não especificado - script será gerado normalmente
+)
+
+script = generator.generate_script(request)
 ```
 
 ### Análise de Scripts Existentes
@@ -170,6 +236,39 @@ print(f"Recomendações: {analysis.recommendations}")
 - **Uso**: Usa evidência social para credibilidade
 - **Exemplo**: "Mais de 1000 pessoas já confirmaram..."
 - **Timing**: Após afirmações importantes
+
+## Campo Descrição (Novo)
+
+### O que é a Descrição?
+O campo de **descrição** é uma nova funcionalidade opcional que permite fornecer contexto adicional sobre:
+- Sua situação específica
+- Objetivo com o vídeo
+- Público-alvo específico
+- Limitações ou recursos disponíveis
+- Resultados esperados
+
+### Como Usar a Descrição
+
+#### Bons Exemplos de Descrição:
+- **Tecnologia**: "quero criar meu primeiro app para conseguir emprego como desenvolvedor"
+- **Negócios**: "tenho R$ 1000 para investir e 3 horas por dia disponíveis"
+- **Educação**: "trabalho 8h por dia e só tenho 2h para estudar concursos"
+- **Lifestyle**: "sempre acordo cansado e sem energia para o dia"
+- **YouTube**: "tenho câmera simples e quero gerar renda extra"
+
+#### Dicas para Escrever uma Boa Descrição:
+1. **Seja específico**: Mencione números, tempo, recursos
+2. **Inclua contexto**: Sua situação atual ou limitações
+3. **Defina objetivo**: O que você quer alcançar
+4. **Mantenha conciso**: Máximo 500 caracteres
+5. **Use linguagem natural**: Escreva como você falaria
+
+### Impacto da Descrição na Qualidade
+Quando você fornece uma descrição:
+- **Hooks mais personalizados**: O script será mais relevante para sua situação
+- **Exemplos mais precisos**: Referências diretas ao seu contexto
+- **Conteúdo mais direcionado**: Foco no que você realmente precisa
+- **Maior engajamento**: Audiência se identifica mais com situações reais
 
 ## Personalização por Nicho
 
