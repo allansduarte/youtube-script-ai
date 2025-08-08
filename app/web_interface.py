@@ -48,7 +48,9 @@ class ScriptGeneratorInterface:
             )
             
             if not structure:
-                return "❌ Erro ao gerar estrutura. Verifique os parâmetros."
+                error_output = "❌ Erro ao gerar estrutura. Verifique os parâmetros."
+                error_status = "❌ **Erro**: Falha na geração da estrutura. Tente novamente."
+                return error_output, error_status
             
             # Format output
             output = f"""
@@ -101,19 +103,50 @@ class ScriptGeneratorInterface:
 **Interaction Prompts**: {structure['recommended_techniques']['interaction_prompts'][0]}
 """
             
-            return output
+            # Generate success status message
+            success_status = """✅ **ESTRUTURA GERADA COM SUCESSO!**
+
+🎯 **Revise a estrutura** ao lado e, se estiver satisfeito, clique em **"✅ Aprovar e Gerar Script"** abaixo.
+
+📝 **Dica**: Você pode regenerar a estrutura com parâmetros diferentes se necessário."""
+            
+            return output, success_status
             
         except Exception as e:
-            return f"❌ Erro ao gerar estrutura: {str(e)}"
+            error_output = f"❌ Erro ao gerar estrutura: {str(e)}"
+            error_status = f"❌ **Erro**: {str(e)}. Tente novamente."
+            return error_output, error_status
     
     def approve_structure_and_prepare(self, current_output):
         """Approve current structure and prepare for script generation."""
-        if "❌" in current_output or "👆" in current_output:
-            return "❌ Gere uma estrutura válida primeiro antes de aprovar."
+        # Check if structure has been generated
+        if not current_output or current_output.strip() == "":
+            return "⚠️ **Erro**: Nenhuma estrutura encontrada. Gere uma estrutura primeiro clicando em 'Gerar Estrutura'."
+        
+        # Check for error messages in the output
+        if "❌ Erro" in current_output:
+            return "⚠️ **Erro**: A estrutura atual contém erros. Gere uma nova estrutura válida primeiro."
+        
+        # Check if it's still the placeholder text
+        if "👆 Preencha os campos" in current_output:
+            return "⚠️ **Atenção**: Preencha os campos e clique em 'Gerar Estrutura' primeiro antes de aprovar."
+        
+        # Check if structure contains expected elements (basic validation)
+        if "# 🎬 Estrutura de Script Gerada" not in current_output:
+            return "⚠️ **Erro**: Estrutura inválida. Gere uma estrutura válida primeiro."
         
         # Store the current output as approved structure
         # In a real implementation, you might want to parse and store the metadata
-        return "✅ Estrutura aprovada! Agora vá para a aba 'Script Completo' para gerar o script final."
+        return """🎉 **ESTRUTURA APROVADA COM SUCESSO!**
+
+✅ Sua estrutura foi aprovada e está pronta para gerar o script completo.
+
+📋 **Próximos Passos:**
+1. Clique na aba **"🎬 Script Completo"** acima
+2. Ajuste o tom e audiência conforme necessário
+3. Clique em **"🎬 Gerar Script Completo"**
+
+🚀 **Dica**: Os parâmetros da estrutura aprovada serão automaticamente aplicados no script final."""
     
     def generate_complete_script(self, topic, niche, hook_type, structure_type, 
                                video_length, tone, audience, include_cta):
@@ -237,17 +270,20 @@ class ScriptGeneratorInterface:
                             )
                             
                             generate_structure_btn = gr.Button("🚀 Gerar Estrutura", variant="primary")
-                            approve_structure_btn = gr.Button("✅ Aprovar e Gerar Script", variant="secondary")
+                            
+                            # Approval section with better visibility
+                            with gr.Group():
+                                gr.Markdown("### 📋 Status da Aprovação")
+                                approval_status = gr.Markdown(
+                                    value="⏳ **Aguardando**: Gere uma estrutura primeiro para poder aprovar.",
+                                    container=True
+                                )
+                                approve_structure_btn = gr.Button("✅ Aprovar e Gerar Script", variant="secondary", size="lg")
                         
                         with gr.Column():
                             structure_output = gr.Markdown(
                                 label="📄 Estrutura Gerada",
                                 value="👆 Preencha os campos ao lado e clique em 'Gerar Estrutura'"
-                            )
-                            
-                            approval_status = gr.Markdown(
-                                label="Status",
-                                value=""
                             )
                 
                 # Tab 2: Complete Script Generation  
@@ -319,7 +355,7 @@ class ScriptGeneratorInterface:
             generate_structure_btn.click(
                 fn=self.generate_script_structure,
                 inputs=[topic_input, niche_dropdown, hook_dropdown, structure_dropdown, length_slider],
-                outputs=[structure_output]
+                outputs=[structure_output, approval_status]
             )
             
             approve_structure_btn.click(
