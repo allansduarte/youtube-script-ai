@@ -29,6 +29,7 @@ class ScriptGenerationRequest:
     tone: str = "casual"
     target_audience: str = "geral"
     include_cta: bool = True
+    description: str = ""
     custom_context: Dict[str, str] = None
 
 
@@ -160,6 +161,7 @@ class ScriptGenerator:
                 script_text=script_text,
                 metadata={
                     "topic": request.topic,
+                    "description": request.description,
                     "niche": request.niche,
                     "hook_type": request.hook_type,
                     "structure_type": request.structure_type,
@@ -224,38 +226,85 @@ class ScriptGenerator:
         """Build context dictionary for hook customization."""
         context = request.custom_context or {}
         
+        # Incorporate user-provided description for better context
+        if request.description:
+            # Use description to enhance context
+            description_lower = request.description.lower()
+            context["user_description"] = request.description
+            
+            # Extract additional context hints from description
+            if any(word in description_lower for word in ["problema", "dificuldade", "desafio"]):
+                context["has_problem_focus"] = "true"
+            if any(word in description_lower for word in ["solução", "resolver", "método"]):
+                context["has_solution_focus"] = "true"
+            if any(word in description_lower for word in ["experiência", "história", "aconteceu"]):
+                context["has_personal_element"] = "true"
+        
         # Add default context based on topic and niche
         topic_lower = request.topic.lower()
         
         if "python" in topic_lower or "programação" in topic_lower:
-            context.update({
-                "something shocking": "90% das pessoas aprendem programação de forma totalmente errada",
-                "contradicts expectation": "pensam que precisam decorar sintaxe",
-                "topic": "programação",
-                "subject": "aprender código"
-            })
+            if request.description:
+                # Use description to customize the shocking statement
+                context.update({
+                    "something shocking": f"90% das pessoas que {request.description[:50].lower()}... fazem isso completamente errado",
+                    "contradicts expectation": "pensam que precisam decorar sintaxe",
+                    "topic": "programação",
+                    "subject": "aprender código"
+                })
+            else:
+                context.update({
+                    "something shocking": "90% das pessoas aprendem programação de forma totalmente errada",
+                    "contradicts expectation": "pensam que precisam decorar sintaxe",
+                    "topic": "programação",
+                    "subject": "aprender código"
+                })
         elif "negócio" in topic_lower or "empreend" in topic_lower:
-            context.update({
-                "something shocking": "95% dos negócios online falham nos primeiros 6 meses",
-                "contradicts expectation": "focam no produto errado",
-                "topic": "empreendedorismo",
-                "subject": "construir um negócio"
-            })
+            if request.description:
+                context.update({
+                    "something shocking": f"95% das pessoas que tentam {request.description[:50].lower()}... falham nos primeiros 6 meses",
+                    "contradicts expectation": "focam no produto errado",
+                    "topic": "empreendedorismo", 
+                    "subject": "construir um negócio"
+                })
+            else:
+                context.update({
+                    "something shocking": "95% dos negócios online falham nos primeiros 6 meses",
+                    "contradicts expectation": "focam no produto errado",
+                    "topic": "empreendedorismo",
+                    "subject": "construir um negócio"
+                })
         elif "youtube" in topic_lower:
-            context.update({
-                "something shocking": "apenas 2% dos youtubers conseguem viver do canal",
-                "contradicts expectation": "fazem tudo pensando no algoritmo",
-                "topic": "YouTube",
-                "subject": "crescer no YouTube"
-            })
+            if request.description:
+                context.update({
+                    "something shocking": f"apenas 2% dos youtubers que {request.description[:50].lower()}... conseguem viver do canal",
+                    "contradicts expectation": "fazem tudo pensando no algoritmo",
+                    "topic": "YouTube",
+                    "subject": "crescer no YouTube"
+                })
+            else:
+                context.update({
+                    "something shocking": "apenas 2% dos youtubers conseguem viver do canal",
+                    "contradicts expectation": "fazem tudo pensando no algoritmo",
+                    "topic": "YouTube",
+                    "subject": "crescer no YouTube"
+                })
         else:
-            # Generic context
-            context.update({
-                "something shocking": f"a maioria das pessoas não sabe como {request.topic.lower()}",
-                "contradicts expectation": "usam métodos desatualizados",
-                "topic": request.topic.lower(),
-                "subject": request.topic.lower()
-            })
+            # Generic context enhanced with description
+            if request.description:
+                context.update({
+                    "something shocking": f"a maioria das pessoas que {request.description[:50].lower()}... faz isso de forma completamente errada",
+                    "contradicts expectation": "usam métodos desatualizados",
+                    "topic": request.topic.lower(),
+                    "subject": request.topic.lower()
+                })
+            else:
+                context.update({
+                    "something shocking": f"a maioria das pessoas não sabe como {request.topic.lower()}",
+                    "contradicts expectation": "usam métodos desatualizados",
+                    "topic": request.topic.lower(),
+                    "subject": request.topic.lower()
+                })
         
         return context
     
@@ -300,26 +349,46 @@ class ScriptGenerator:
         
         topic = request.topic.lower()
         audience_level = self.audience_adapters[request.target_audience]["complexity"]
+        description_context = f" {request.description}" if request.description else ""
         
         if "problema" in element.lower():
             if "python" in topic:
-                return f"O maior problema que vejo é que as pessoas tentam aprender Python decorando sintaxe. Isso não funciona porque programação não é sobre decorar, é sobre resolver problemas. Você passa horas tentando lembrar como escrever um loop, quando deveria estar focando em entender a lógica por trás."
+                if request.description:
+                    return f"O maior problema que vejo é que as pessoas tentam {request.description.lower()}, mas fazem isso decorando sintaxe. Isso não funciona porque programação não é sobre decorar, é sobre resolver problemas. Você passa horas tentando lembrar como escrever um loop, quando deveria estar focando em entender a lógica por trás."
+                else:
+                    return f"O maior problema que vejo é que as pessoas tentam aprender Python decorando sintaxe. Isso não funciona porque programação não é sobre decorar, é sobre resolver problemas. Você passa horas tentando lembrar como escrever um loop, quando deveria estar focando em entender a lógica por trás."
             else:
-                return f"O principal problema com {topic} é que a maioria das pessoas aborda de forma completamente errada. Elas focam nos detalhes técnicos sem entender os fundamentos."
+                base_problem = f"O principal problema com {topic}"
+                if request.description:
+                    return f"{base_problem} é que quando você {request.description.lower()}, a maioria das pessoas aborda de forma completamente errada. Elas focam nos detalhes técnicos sem entender os fundamentos."
+                else:
+                    return f"{base_problem} é que a maioria das pessoas aborda de forma completamente errada. Elas focam nos detalhes técnicos sem entender os fundamentos."
         
         elif "solução" in element.lower():
-            return f"A solução que descobri muda tudo. Em vez de {topic} da forma tradicional, você precisa começar com uma abordagem diferente. Vou te mostrar exatamente como fazer isso."
+            if request.description:
+                return f"A solução que descobri muda tudo. Em vez de {topic} da forma tradicional, especialmente quando você {request.description.lower()}, você precisa começar com uma abordagem diferente. Vou te mostrar exatamente como fazer isso."
+            else:
+                return f"A solução que descobri muda tudo. Em vez de {topic} da forma tradicional, você precisa começar com uma abordagem diferente. Vou te mostrar exatamente como fazer isso."
         
         elif "exemplo" in element.lower() or "demonstração" in element.lower():
-            return f"Deixe-me te mostrar um exemplo prático. Quando eu estava aprendendo {topic}, cometi esse mesmo erro. Mas depois que descobri essa técnica, tudo ficou mais claro."
+            if request.description:
+                return f"Deixe-me te mostrar um exemplo prático. Quando eu estava {request.description.lower()}, cometi esse mesmo erro. Mas depois que descobri essa técnica, tudo ficou mais claro."
+            else:
+                return f"Deixe-me te mostrar um exemplo prático. Quando eu estava aprendendo {topic}, cometi esse mesmo erro. Mas depois que descobri essa técnica, tudo ficou mais claro."
         
         elif "resultado" in element.lower():
-            return f"Os resultados foram impressionantes. Em apenas algumas semanas aplicando essa metodologia, consegui {topic} de forma muito mais eficiente."
+            if request.description:
+                return f"Os resultados foram impressionantes. Em apenas algumas semanas aplicando essa metodologia para {request.description.lower()}, consegui {topic} de forma muito mais eficiente."
+            else:
+                return f"Os resultados foram impressionantes. Em apenas algumas semanas aplicando essa metodologia, consegui {topic} de forma muito mais eficiente."
         
         else:
-            # Generic content generation
+            # Generic content generation enhanced with description
             emphasis = random.choice(self.tone_modifiers[request.tone]["emphasis"])
-            return f"Isso é {emphasis} importante para {topic}. A diferença está nos detalhes e na forma como você aborda cada etapa do processo."
+            if request.description:
+                return f"Isso é {emphasis} importante para {topic}, especialmente quando você {request.description.lower()}. A diferença está nos detalhes e na forma como você aborda cada etapa do processo."
+            else:
+                return f"Isso é {emphasis} importante para {topic}. A diferença está nos detalhes e na forma como você aborda cada etapa do processo."
     
     def _generate_engagement_element(self, request: ScriptGenerationRequest) -> str:
         """Generate an engagement element."""
@@ -478,6 +547,7 @@ class ScriptGenerator:
                     tone=request.tone,
                     target_audience=request.target_audience,
                     include_cta=request.include_cta,
+                    description=request.description,
                     custom_context=request.custom_context
                 )
                 

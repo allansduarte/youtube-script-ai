@@ -36,7 +36,7 @@ class ScriptGeneratorInterface:
         except FileNotFoundError:
             return {"interface": {"port": 7860, "share": False, "debug": False}}
     
-    def generate_script_structure(self, topic, niche, hook_type, structure_type, video_length):
+    def generate_script_structure(self, topic, description, niche, hook_type, structure_type, video_length):
         """Generate script structure based on user inputs."""
         try:
             structure = self.db.generate_complete_script_structure(
@@ -57,7 +57,13 @@ class ScriptGeneratorInterface:
 # 🎬 Estrutura de Script Gerada
 
 ## 📊 Metadados
-- **Tópico**: {structure['metadata']['topic']}
+- **Tópico**: {structure['metadata']['topic']}"""
+            
+            if description and description.strip():
+                output += f"""
+- **Descrição**: {description}"""
+            
+            output += f"""
 - **Nicho**: {structure['metadata']['niche']}
 - **Duração estimada**: {structure['metadata']['estimated_length']} minutos
 - **Tipo de Hook**: {structure['metadata']['hook_type']}
@@ -148,7 +154,7 @@ class ScriptGeneratorInterface:
 
 🚀 **Dica**: Os parâmetros da estrutura aprovada serão automaticamente aplicados no script final."""
     
-    def generate_complete_script(self, topic, niche, hook_type, structure_type, 
+    def generate_complete_script(self, topic, description, niche, hook_type, structure_type, 
                                video_length, tone, audience, include_cta):
         """Generate complete script based on approved structure."""
         try:
@@ -161,7 +167,8 @@ class ScriptGeneratorInterface:
                 target_duration=int(video_length),
                 tone=tone,
                 target_audience=audience,
-                include_cta=include_cta
+                include_cta=include_cta,
+                description=description or ""
             )
             
             # Generate the complete script
@@ -175,7 +182,13 @@ class ScriptGeneratorInterface:
 # 🎬 Script Completo Gerado
 
 ## 📊 Metadados do Script
-- **Tópico**: {script.metadata['topic']}
+- **Tópico**: {script.metadata['topic']}"""
+            
+            if script.metadata.get('description'):
+                output += f"""
+- **Descrição**: {script.metadata['description']}"""
+            
+            output += f"""
 - **Nicho**: {script.metadata['niche']}
 - **Tom**: {script.metadata['tone']}
 - **Audiência**: {script.metadata['target_audience']}
@@ -243,6 +256,14 @@ class ScriptGeneratorInterface:
                                 value="Como aprender programação do zero"
                             )
                             
+                            description_input = gr.Textbox(
+                                label="📋 Descrição (Opcional)",
+                                placeholder="Ex: Quero criar meu primeiro projeto web para encontrar emprego na área",
+                                lines=3,
+                                max_lines=4,
+                                info="Forneça contexto adicional sobre seu objetivo, situação ou necessidade específica (máx. 500 caracteres)"
+                            )
+                            
                             niche_dropdown = gr.Dropdown(
                                 choices=niches,
                                 label="🎯 Nicho",
@@ -297,6 +318,14 @@ class ScriptGeneratorInterface:
                                 label="📝 Tópico do Vídeo",
                                 placeholder="Ex: Como aprender programação do zero",
                                 value="Como aprender programação do zero"
+                            )
+                            
+                            script_description_input = gr.Textbox(
+                                label="📋 Descrição (Opcional)",
+                                placeholder="Ex: Quero criar meu primeiro projeto web para encontrar emprego na área",
+                                lines=3,
+                                max_lines=4,
+                                info="Forneça contexto adicional sobre seu objetivo, situação ou necessidade específica (máx. 500 caracteres)"
                             )
                             
                             script_niche_dropdown = gr.Dropdown(
@@ -354,7 +383,7 @@ class ScriptGeneratorInterface:
             # Connect Tab 1 buttons
             generate_structure_btn.click(
                 fn=self.generate_script_structure,
-                inputs=[topic_input, niche_dropdown, hook_dropdown, structure_dropdown, length_slider],
+                inputs=[topic_input, description_input, niche_dropdown, hook_dropdown, structure_dropdown, length_slider],
                 outputs=[structure_output, approval_status]
             )
             
@@ -368,7 +397,7 @@ class ScriptGeneratorInterface:
             generate_script_btn.click(
                 fn=self.generate_complete_script,
                 inputs=[
-                    script_topic_input, script_niche_dropdown, script_hook_dropdown, 
+                    script_topic_input, script_description_input, script_niche_dropdown, script_hook_dropdown, 
                     script_structure_dropdown, script_length_slider, tone_dropdown, 
                     audience_dropdown, include_cta_checkbox
                 ],
@@ -380,14 +409,29 @@ class ScriptGeneratorInterface:
             ## 💡 Exemplos de Uso
             
             **Tecnologia**: "Os 5 melhores apps que você precisa conhecer em 2024"
+            - *Descrição*: "Quero otimizar minha produtividade no trabalho remoto"
+            
             **Educação**: "Como estudar para concursos de forma eficiente"
+            - *Descrição*: "Trabalho 8h por dia e só tenho 2h livres para estudar"
+            
             **Negócios**: "Como começar um negócio online do zero"
+            - *Descrição*: "Tenho R$ 1000 para investir e quero gerar renda extra"
+            
             **Lifestyle**: "Minha rotina matinal que mudou minha vida"
+            - *Descrição*: "Sempre acordo cansado e sem disposição para o dia"
+            
             **Entretenimento**: "Reagindo aos memes mais virais da semana"
+            - *Descrição*: "Quero criar conteúdo que conecte com a Geração Z"
             
             ## 🔄 Fluxo de Uso
-            1. **Tab Estrutura**: Configure parâmetros → Gere estrutura → Revise → Aprove
-            2. **Tab Script Completo**: Ajuste tom e audiência → Gere script completo
+            1. **Tab Estrutura**: Configure parâmetros → Adicione descrição (opcional) → Gere estrutura → Revise → Aprove
+            2. **Tab Script Completo**: Ajuste tom e audiência → Adicione descrição (opcional) → Gere script completo
+            
+            ## 📋 Dicas para Descrição
+            - Mencione seu objetivo específico
+            - Inclua sua situação atual ou limitações
+            - Descreva seu público-alvo
+            - Fale sobre resultados esperados
             """)
         
         return interface
